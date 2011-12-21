@@ -1,15 +1,24 @@
 import sys, os
 from fabric.api import env, run, put, open_shell, local
 
-# step 1: git clone git@github.com:iandennismiller/droptato.git ./somewhere
+# step 1:
+# git clone git@github.com:iandennismiller/droptato.git ./$somewhere
+# cd $somewhere
 
-# step 2: edit these SSH values
-
+# step 2:
+# edit these SSH values (in fabfile.py)
+#
+# ssh username
 env.user = ''
+# ssh public key used for non-interactive login
 env.key_filename = ['']
+# ssh host
 env.hosts = ['']
 
-# step 3: cd somewhere; fab shell; fab init
+# step 3: 
+# fab shell
+# fab git_put
+# fab init
 
 def help():
     "print usage information"
@@ -62,20 +71,6 @@ def git_put():
     os.system("rm -rf /tmp/droptato.git")
     local("git remote rm origin; git remote add origin %s@%s:/home/private/droptato.git" % (env.user, env.hosts[0]))
     local("git push -u origin master")
-    help()
-
-def git_init():
-    "initialize an empty remote master repository: droptato.git"
-
-    cmd = """
-mkdir /home/private/droptato.git; cd /home/private/droptato.git; git init --bare;
-mkdir /home/tmp/blog; cd /home/tmp/blog; git init;
-git remote add origin /home/private/droptato.git;
-git config branch.master.remote origin; git config branch.master.merge refs/heads/master;
-touch notes.md; git add notes.md; git commit -m 'initial import'; git push origin master
-"""
-    run(cmd)
-    hook_install()
     help()
 
 def shell():
