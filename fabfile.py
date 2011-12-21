@@ -1,7 +1,7 @@
 import sys, os
 from fabric.api import env, run, put, open_shell, local
 
-# step 1: git clone https://github.com/iandennismiller/droptato.git
+# step 1: git clone git@github.com:iandennismiller/droptato.git
 
 # step 2: edit these SSH values
 
@@ -56,7 +56,12 @@ def hook_install():
 
 def git_put():
     "create new master repository based on this one"
-    pass
+    
+    cmd = "git clone --bare . /tmp/droptato.git"
+    put("/tmp/droptato.git","/home/private")
+    cmd = "git remote add origin %s@%s/home/private/droptato.git" % (env.user, env.hosts[0])
+    cmd = "git push -u origin master"
+    os.system("rm -rf /tmp/droptato.git")
 
 def git_init():
     "initialize an empty remote master repository: droptato.git"
