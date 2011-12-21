@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#Rebuild the blog
+unset GIT_DIR
+. /home/private/.bash_profile
+cd /home/tmp
+
+echo "git clone"
+git clone /home/private/blog.git
+
+echo "fab build"
+cd /home/tmp/blog
+fab build
+
+echo "fab deploy"
+fab deploy:"/home/tmp/blog/blogofile/_site/","/home/public/"
+
+echo "clean up"
+rm -rf /home/tmp/blog
